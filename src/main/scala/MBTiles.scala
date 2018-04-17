@@ -17,7 +17,6 @@ class MBTiles(dbPath: String) {
   def fetch(zoom: Int, col: Int, row: Int): Option[Array[Byte]] = {
     // https://github.com/mapbox/mbtiles-spec/blob/master/1.3/spec.md#content-1
     val flipRow = (1<<zoom) - 1 - row
-    println(s"Flip: $row -> $flipRow")
     find(zoom, col, flipRow).transact(xa).unsafeRunSync.map { tile =>
       val is = new ByteArrayInputStream(tile.pbf)
       val gzip = new GZIPInputStream(is)
